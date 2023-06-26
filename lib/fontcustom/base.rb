@@ -50,11 +50,21 @@ module Fontcustom
 
     # Calculates a hash of vectors, options, and templates (content and filenames)
     def checksum
-      files = Dir.glob(File.join(@options[:input][:vectors], "*.svg")).select { |fn| File.file?(fn) }
-      files += Dir.glob(File.join(@options[:input][:templates], "*")).select { |fn| File.file?(fn) }
+      files = Dir.glob(File.join(@options[:input][:vectors], "*.svg")).sort.select { |fn| File.file?(fn) }
+      files += Dir.glob(File.join(@options[:input][:templates], "*")).sort.select { |fn| File.file?(fn) }
       content = files.map { |file| File.read(file) }.join
       content << files.join
-      content << @options.flatten(2).join
+      content << @options["autowidth"].to_s
+      content << @options["copyright"].to_s
+      content << @options["css3"].to_s
+      content << @options["css_selector"].to_s
+      content << @options["font_ascent"].to_s
+      content << @options["font_descent"].to_s
+      content << @options["font_design_size"].to_s
+      content << @options["font_em"].to_s
+      content << @options["font_name"].to_s
+      content << @options["no_hash"].to_s
+      content << @options["templates"].to_s
       Digest::SHA2.hexdigest(content).to_s
     end
 
