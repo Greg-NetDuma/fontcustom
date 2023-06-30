@@ -52,7 +52,7 @@ module Fontcustom
     def checksum
       files = Dir.glob(File.join(@options[:input][:vectors], "*.svg")).sort.select { |fn| File.file?(fn) }
       files += Dir.glob(File.join(@options[:input][:templates], "*")).sort.select { |fn| File.file?(fn) }
-      content = files.map { |file| File.read(file) }.join
+      content = files.map { |file| File.read(file, mode: "rb").encode("UTF-8", universal_newline: true) }.join
       content << files.join
       content << @options["autowidth"].to_s
       content << @options["copyright"].to_s
